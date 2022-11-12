@@ -1,0 +1,20 @@
+{
+    "name": "sd_vrbrain",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "dependencies": {
+        "lodash": "^4.17.21",
+        "property-watch-decorator": "^1.2.5",
+        "reflect-metadata": "^0.1.13",
+        "rxjs": "^7.5.7",
+        "ts-singleton": "^1.0.2",
+        "typescript": "^4.8.4"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+}
