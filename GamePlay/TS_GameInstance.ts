@@ -7,9 +7,8 @@ class TS_GameInstance extends UE.GameInstance {
     //@no-blueprint
     static GameInstance: TS_GameInstance;
     ReceiveInit(): void {
-        new ResourceManager()["initialize"]();
+        // new ResourceManager()["initialize"]();
         TS_GameInstance.GameInstance = this;
-        console.warn(this.GetWorld().GetName());
         //ResourceManager.Initialize();
         // let _assets = UE.NewArray(UE.AssetData);
         // const _valid =

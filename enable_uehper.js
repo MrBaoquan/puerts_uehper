@@ -22,15 +22,20 @@ console.log("enable puerts , please wait...");
 // process.chdir(puertsPath);
 // const output = execSync("node enable_puerts_module.js", { encoding: "utf-8" }); // the default is 'buffer'
 //console.log(output);
-const _javascriptDir = path.join(projectRoot, "Content/JavaScript/");
+const _dstJavascriptDir = path.join(projectRoot, "Content/JavaScript/");
 const _packagePath = path.join(projectRoot, "package.json");
 if (!fs.existsSync(_packagePath)) {
     copyFileSync("./__messy/package.json", _packagePath);
 }
 
+// 项目开发包安装
 process.chdir(projectRoot);
-const output = execSync("npm install .", { encoding: "utf-8" });
-console.log(output);
+console.log(execSync("npm install .", { encoding: "utf-8" }));
+
+// 发布目录包安装
+copyFileSync("./package.json", _dstJavascriptDir);
+process.chdir(_dstJavascriptDir);
+execSync("npm install .", { encoding: "utf-8" });
 
 const _gameDir = path.join(__dirname, "../game");
 if (!fs.existsSync(_gameDir)) {
