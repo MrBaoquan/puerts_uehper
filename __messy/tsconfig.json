@@ -6,6 +6,7 @@
         "module": "commonjs",
         "jsx": "react",
         "sourceMap": true,
+        "rootDir": "TypeScript",
         "typeRoots": ["Plugins/Puerts/Typing", "./node_modules/@types"],
         "outDir": "Content/JavaScript"
     },
