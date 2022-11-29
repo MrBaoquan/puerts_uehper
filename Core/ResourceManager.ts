@@ -1,38 +1,26 @@
 import * as UE from "ue";
 
-import { singleton } from "ts-singleton";
 import { $ref } from "puerts";
+import resource from "../../resources";
+import { ResConfig, startSceneName } from "./types";
 
-interface ResConfig {
-    [sceneName: string]: { type: string; path: string }[];
-}
-const startSceneName: string = "SceneEntry";
-
-@singleton
-class ResourceManager {
+class ResourceManager extends UE.Actor {
+    //@no-blueprint
     public Get<T extends UE.Object>(name: string, type: UE.Class): T {
         const _resKey = this.generateAssetKey(name, type.GetName());
-        const _sceneAssets = this.assets.get(startSceneName);
-        if (!_sceneAssets.has(_resKey)) {
-            console.warn("there is no asset named " + _resKey);
-            return null;
-        }
-        return _sceneAssets.get(_resKey) as T;
+        return this.assets.Get(_resKey) as T;
     }
 
-    private assets: Map<string, Map<string, UE.Object>>;
-    private initialize(): void {
-        this.assets = new Map<string, Map<string, UE.Object>>();
+    assets: UE.TMap<string, UE.Object>;
 
-        var _resConfig: ResConfig = JSON.parse(
-            UE.UEHper_BPF.LoadFileToString(
-                UE.KismetSystemLibrary.GetProjectContentDirectory() +
-                    "UEHper/resource.json"
-            )
-        );
-        this.assets.set(startSceneName, new Map<string, UE.Object>());
+    // 资源初始化
+    private initialize(): void {
+        //   this.assets = UE.NewMap(UE.BuiltinString,)
+        console.log("ResourceManager:initialize");
+        this.assets = UE.NewMap(UE.BuiltinString, UE.Object);
+        let _resConfig: ResConfig = resource;
+        //this.assets.Add(startSceneName, UE.NewMap(UE.BuiltinString, UE.Object));
         _resConfig[startSceneName].forEach((_config) => {
-            console.log(_config.path);
             let _assets = UE.NewArray(UE.AssetData);
             const _valid =
                 UE.AssetRegistryHelpers.GetAssetRegistry().GetAssetsByPath(
@@ -46,24 +34,19 @@ class ResourceManager {
                 const _assetInfo = _assets.Get(_idx);
                 if (_assetInfo.AssetClass != _config.type) continue;
 
-                var _texObject = UE.UEHper_BPF.LoadObjectByPath(
-                    UE.UEHper_BPF.LoadClassByName(_assetInfo.AssetClass),
-                    _assetInfo.ObjectPath
+                var _texObject = UE.Object.Load(_assetInfo.ObjectPath);
+                this.assets.Add(
+                    this.generateAssetKey(
+                        _assetInfo.AssetName,
+                        _assetInfo.AssetClass
+                    ),
+                    _texObject
                 );
-                this.assets
-                    .get("SceneEntry")
-                    .set(
-                        this.generateAssetKey(
-                            _assetInfo.AssetName,
-                            _assetInfo.AssetClass
-                        ),
-                        _texObject
-                    );
             }
         });
-        console.log("ResourceManager initialized...");
     }
 
+    //@no-blueprint
     private generateAssetKey(name: string, type: string): string {
         return name + "_" + type;
     }

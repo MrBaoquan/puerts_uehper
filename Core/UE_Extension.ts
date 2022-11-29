@@ -17,8 +17,9 @@ declare module "ue" {
          * Get child actor in scene
          * @param name Child actor name
          */
-        Get<T extends UE.Actor>(ActorName: string): T;
+        GetChild<T extends UE.Actor>(ActorName: string): T;
         GetAll(): UE.TArray<UE.Actor>;
+        SetActorHiddenInGameWithChildren(NewHidden: boolean): void;
     }
 
     /**
@@ -80,7 +81,7 @@ UE.Actor.prototype.GetAll = function GetAll(): UE.TArray<UE.Actor> {
     return _childs;
 };
 
-UE.Actor.prototype.Get = function Get<T extends UE.Actor>(
+UE.Actor.prototype.GetChild = function GetChild<T extends UE.Actor>(
     ActorName: string
 ): T {
     let _childs = UE.NewArray(UE.Actor);
@@ -91,6 +92,17 @@ UE.Actor.prototype.Get = function Get<T extends UE.Actor>(
         if (_realName == ActorName) return _actor as T;
     }
     return undefined;
+};
+
+UE.Actor.prototype.SetActorHiddenInGameWithChildren = function (
+    NewHidden: boolean
+): void {
+    this.SetActorHiddenInGame(NewHidden);
+    const _children = this.GetAll();
+    for (let _idx = 0; _idx < _children.Num(); ++_idx) {
+        const _actor = _children.Get(_idx);
+        _actor.SetActorHiddenInGame(NewHidden);
+    }
 };
 
 UE.World.prototype.FindActorByName = function FindActorByName<
