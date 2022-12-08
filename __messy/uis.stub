@@ -1,0 +1,8 @@
+import { UIConfig } from "./puerts_uehper/Core/types";
+
+const uis: UIConfig = {
+    SceneEntry: {
+        IdleUI: {}
+    },
+};
+export default uis;

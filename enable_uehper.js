@@ -30,7 +30,19 @@ if (!fs.existsSync(_packagePath)) {
     copyFileSync("./__messy/package.json", _packagePath);
 }
 const _tsconfigPath = path.join(projectRoot, "tsconfig.json");
-copyFileSync("./__messy/tsconfig.json", _tsconfigPath);
+if (!fs.existsSync(_tsconfigPath)) {
+    copyFileSync("./__messy/tsconfig.json", _tsconfigPath);
+}
+
+const _resConfigPath = path.join(projectRoot, "TypeScript/resources.ts");
+if (!fs.existsSync(_resConfigPath)) {
+    copyFileSync("./__messy/resources.stub", _resConfigPath);
+}
+
+const _uiConfigPath = path.join(projectRoot, "TypeScript/uis.ts");
+if (!fs.existsSync(_uiConfigPath)) {
+    copyFileSync("./__messy/uis.stub", _uiConfigPath);
+}
 
 // 项目开发包安装
 process.chdir(projectRoot);

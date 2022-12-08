@@ -1,0 +1,12 @@
+import { ResConfig } from "./puerts_uehper/Core/types";
+
+const resources: ResConfig = {
+    SceneEntry: [
+        {
+            type: "Texture2D",
+            path: "/Game/ArtAssets",
+        }
+    ],
+};
+
+export default resources;
