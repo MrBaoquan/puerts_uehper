@@ -1,6 +1,6 @@
 import * as UE from "ue";
-import ResourceManager from "../Core/ResourceManager";
-import UIManager from "../Core/UIManager";
+import ResourceManager from "../Blueprints/ResourceManager";
+import UIManager from "../Blueprints/UIManager";
 import TS_GameInstance from "./TS_GameInstance";
 import TS_UEHperEntry from "./TS_UEHperEntry";
 class TS_GameMode extends UE.GameMode {
@@ -8,7 +8,7 @@ class TS_GameMode extends UE.GameMode {
     private resManger: ResourceManager;
     private uehperEntry: TS_UEHperEntry;
     Constructor(): void {
-        console.log("TS_GameMode:Constructor");
+        console.log("[uehper]: TS_GameMode:Constructor");
         TS_GameInstance.World = this.GetWorld();
 
         this.uehperEntry = this.GetWorld().SpawnActor(
@@ -23,7 +23,7 @@ class TS_GameMode extends UE.GameMode {
 
         this.resManger = this.GetWorld().SpawnActor(
             UE.Class.Load(
-                "/Game/Blueprints/TypeScript/puerts_uehper/Core/ResourceManager.ResourceManager_C"
+                "/Game/Blueprints/TypeScript/puerts_uehper/Blueprints/ResourceManager.ResourceManager_C"
             ),
             undefined,
             UE.ESpawnActorCollisionHandlingMethod.Undefined,
@@ -34,7 +34,7 @@ class TS_GameMode extends UE.GameMode {
 
         this.uiManager = this.GetWorld().SpawnActor(
             UE.Class.Load(
-                "/Game/Blueprints/TypeScript/puerts_uehper/Core/UIManager.UIManager_C"
+                "/Game/Blueprints/TypeScript/puerts_uehper/Blueprints/UIManager.UIManager_C"
             ),
             undefined,
             UE.ESpawnActorCollisionHandlingMethod.Undefined,
@@ -45,7 +45,7 @@ class TS_GameMode extends UE.GameMode {
     }
 
     ReceiveBeginPlay(): void {
-        console.log("TS_GameMode:BeginPlay");
+        console.log("[uehper]: TS_GameMode BeginPlay");
         this.resManger.K2_AttachToActor(
             this.uehperEntry,
             null,

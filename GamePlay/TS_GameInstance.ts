@@ -10,10 +10,10 @@ class TS_GameInstance extends UE.GameInstance {
     }
 
     ReceiveInit(): void {
-        console.log("TS_GameInstance:Init");
+        console.log("[uehper]: TS_GameInstance Init");
     }
     ReceiveShutdown(): void {
-        console.log("TS_GameInstance:Shutdown");
+        console.log("[uehper]: TS_GameInstance Shutdown");
     }
 }
 

@@ -1,5 +1,5 @@
-import { timer, lastValueFrom } from "rxjs";
-import * as UE from "ue";
+import { timer, lastValueFrom } from 'rxjs';
+import * as UE from 'ue';
 
 const delayTime = async (duration: number): Promise<0> => {
     return lastValueFrom(timer(duration));
@@ -10,7 +10,17 @@ const toJSArray = <T>(array: UE.TArray<T>) => {
     for (let _index = 0; _index < array.Num(); ++_index) {
         _array.push(array.Get(_index));
     }
-    return _array;
+    return _array as Array<T>;
+};
+
+const toJSMap = <T>(map: UE.TMap<string, T>) => {
+    let _map = new Map<string, T>();
+    for (let _index = 0; _index < map.Num(); ++_index) {
+        const _key = map.GetKey(_index);
+        const _value = map.Get(_key);
+        _map.set(_key, _value);
+    }
+    return _map;
 };
 
 const toUEArray = <T extends UE.SupportedContainerKVType>(
@@ -24,4 +34,8 @@ const toUEArray = <T extends UE.SupportedContainerKVType>(
     return _array;
 };
 
-export { delayTime, toJSArray, toUEArray };
+const info = (message: string) => {
+    UE.KismetSystemLibrary.PrintString(null, message, true, true, new UE.LinearColor(1, 1, 1, 1), 5.0);
+};
+
+export { delayTime, toJSArray, toJSMap, toUEArray, info };

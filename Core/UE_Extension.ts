@@ -1,15 +1,12 @@
 import { $ref } from "puerts";
 import * as UE from "ue";
-
+console.log("import ue_extension");
 declare module "ue" {
     interface Object {
         /**
          * 添加组件
          */
-        CreateDefaultSubobjectGeneric<T extends UE.Object>(
-            SubobjectFName: string,
-            ReturnType: UE.Class
-        ): T;
+        CreateDefaultSubobjectGeneric<T extends UE.Object>(SubobjectFName: string, ReturnType: UE.Class): T;
     }
 
     interface Actor {
@@ -18,8 +15,9 @@ declare module "ue" {
          * @param name Child actor name
          */
         GetChild<T extends UE.Actor>(ActorName: string): T;
-        GetAll(): UE.TArray<UE.Actor>;
+        GetAllAttachedActors<T extends UE.Actor>(): UE.TArray<T>;
         SetActorHiddenInGameWithChildren(NewHidden: boolean): void;
+        DisplayName(): string;
     }
 
     /**
@@ -30,31 +28,25 @@ declare module "ue" {
     }
 
     interface World {
-        FindActorByName<T extends UE.Actor>(
-            ActorName: string,
-            ActorClass: UE.Class
-        ): T;
+        FindActorByName<T extends UE.Actor>(ActorName: string, ActorClass: UE.Class): T;
     }
 }
 
-UE.Object.prototype.CreateDefaultSubobjectGeneric =
-    function CreateDefaultSubobjectGeneric<T extends UE.Object>(
-        SubobjectFName: string,
-        ReturnType: UE.Class
-    ): T {
-        return this.CreateDefaultSubobject(
-            SubobjectFName,
-            ReturnType,
-            ReturnType,
-            /*bIsRequired =*/ true,
-            /*bIsAbstract =*/ false,
-            /*bTransient =*/ false
-        ) as T;
-    };
-
-UE.SceneComponent.prototype.Get = function Get<T extends UE.SceneComponent>(
-    path: string
+UE.Object.prototype.CreateDefaultSubobjectGeneric = function CreateDefaultSubobjectGeneric<T extends UE.Object>(
+    SubobjectFName: string,
+    ReturnType: UE.Class
 ): T {
+    return this.CreateDefaultSubobject(
+        SubobjectFName,
+        ReturnType,
+        ReturnType,
+        /*bIsRequired =*/ true,
+        /*bIsAbstract =*/ false,
+        /*bTransient =*/ false
+    ) as T;
+};
+
+UE.SceneComponent.prototype.Get = function Get<T extends UE.SceneComponent>(path: string): T {
     const nodes = path.split("/").reverse();
     let node = nodes.pop();
     let _rootNode: UE.SceneComponent = this;
@@ -75,15 +67,16 @@ UE.SceneComponent.prototype.Get = function Get<T extends UE.SceneComponent>(
     return _rootNode == this ? undefined : (_rootNode as T);
 };
 
-UE.Actor.prototype.GetAll = function GetAll(): UE.TArray<UE.Actor> {
+UE.Actor.prototype.GetAllAttachedActors = function GetAll<T extends UE.Actor>(): UE.TArray<T> {
     let _childs = UE.NewArray(UE.Actor);
+    
     this.GetAttachedActors($ref(_childs), true);
-    return _childs;
+    
+
+    return _childs as UE.TArray<T>;
 };
 
-UE.Actor.prototype.GetChild = function GetChild<T extends UE.Actor>(
-    ActorName: string
-): T {
+UE.Actor.prototype.GetChild = function GetChild<T extends UE.Actor>(ActorName: string): T {
     let _childs = UE.NewArray(UE.Actor);
     this.GetAttachedActors($ref(_childs), true);
     for (let _index = 0; _index < _childs.Num(); ++_index) {
@@ -94,9 +87,7 @@ UE.Actor.prototype.GetChild = function GetChild<T extends UE.Actor>(
     return undefined;
 };
 
-UE.Actor.prototype.SetActorHiddenInGameWithChildren = function (
-    NewHidden: boolean
-): void {
+UE.Actor.prototype.SetActorHiddenInGameWithChildren = function (NewHidden: boolean): void {
     this.SetActorHiddenInGame(NewHidden);
     const _children = this.GetAll();
     for (let _idx = 0; _idx < _children.Num(); ++_idx) {
@@ -105,15 +96,21 @@ UE.Actor.prototype.SetActorHiddenInGameWithChildren = function (
     }
 };
 
-UE.World.prototype.FindActorByName = function FindActorByName<
-    T extends UE.Actor
->(ActorName: string, ActorClass: UE.Class): T {
+UE.Actor.prototype.DisplayName = function (): string {
+    return UE.KismetSystemLibrary.GetDisplayName(this);
+};
+
+UE.World.prototype.FindActorByName = function FindActorByName<T extends UE.Actor>(
+    ActorName: string,
+    ActorClass: UE.Class
+): T {
     let _childs = UE.NewArray(UE.Actor);
     UE.GameplayStatics.GetAllActorsOfClass(this, ActorClass, $ref(_childs));
 
     for (let _index = 0; _index < _childs.Num(); ++_index) {
         const _actor = _childs.Get(_index);
         const _realName = UE.KismetSystemLibrary.GetDisplayName(_actor);
+
         if (_realName == ActorName) return _actor as T;
     }
     return undefined;

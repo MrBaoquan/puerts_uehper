@@ -1,8 +1,8 @@
 import * as UE from "ue";
 import TS_GameInstance from "../GamePlay/TS_GameInstance";
 import TS_GameMode from "../GamePlay/TS_GameMode";
-import ResourceManager from "./ResourceManager";
-import UIManager from "./UIManager";
+import ResourceManager from "../Blueprints/ResourceManager";
+import UIManager from "../Blueprints/UIManager";
 
 class Managements {
     public static get Resource(): ResourceManager {
