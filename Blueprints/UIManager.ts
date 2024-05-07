@@ -69,6 +69,7 @@ class UIManager extends UE.Actor {
             ) as UIBase;
 
             _newUIObject.loadUI_UMG(`/Game/Blueprints/UI/${_uiKey}.${_uiKey}_C`);
+
             this.allUIs.Add(_uiKey, _newUIObject);
             this.allUIList.Add(_newUIObject);
         });

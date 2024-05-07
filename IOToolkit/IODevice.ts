@@ -1,5 +1,5 @@
-import { toManualReleaseDelegate } from "puerts";
-import { EIOEvent, ESetDOType, IOToolkit_BPF } from "ue";
+import { toManualReleaseDelegate } from 'puerts';
+import { EIOEvent, ESetDOType, IOToolkit_BPF } from 'ue';
 
 class IODevice {
     private name: string;
@@ -8,20 +8,9 @@ class IODevice {
     }
 
     BindKey(keyName: string, eventType: EIOEvent, callback: () => void);
-    BindKey<T1>(
-        keyName: string,
-        eventType: EIOEvent,
-        callback: (arg1: T1) => void,
-        arg1: T1
-    ): void;
+    BindKey<T1>(keyName: string, eventType: EIOEvent, callback: (arg1: T1) => void, arg1: T1): void;
 
-    BindKey<T1, T2>(
-        keyName: string,
-        eventType: EIOEvent,
-        callback: (arg1: T1, arg2: T2) => void,
-        arg1: T1,
-        arg2: T2
-    ): void;
+    BindKey<T1, T2>(keyName: string, eventType: EIOEvent, callback: (arg1: T1, arg2: T2) => void, arg1: T1, arg2: T2): void;
 
     BindKey<T1, T2, T3>(
         keyName: string,
@@ -32,12 +21,7 @@ class IODevice {
         arg3: T3
     ): void;
 
-    BindKey(
-        keyName: string,
-        eventType: EIOEvent,
-        callback: (...args: any[]) => void,
-        ...args: any[]
-    ): void {
+    BindKey(keyName: string, eventType: EIOEvent, callback: (...args: any[]) => void, ...args: any[]): void {
         var _callback = callback;
 
         IOToolkit_BPF.IO_BindKey(
@@ -51,18 +35,9 @@ class IODevice {
     }
 
     /// 输入绑定
-    BindAction(
-        actionName: string,
-        eventType: EIOEvent,
-        callback: (key: string) => void
-    );
+    BindAction(actionName: string, eventType: EIOEvent, callback: (key: string) => void);
 
-    BindAction<T1>(
-        actionName: string,
-        eventType: EIOEvent,
-        callback: (key: string, arg1: T1) => void,
-        arg1: T1
-    ): void;
+    BindAction<T1>(actionName: string, eventType: EIOEvent, callback: (key: string, arg1: T1) => void, arg1: T1): void;
 
     BindAction<T1, T2>(
         actionName: string,
@@ -81,12 +56,7 @@ class IODevice {
         arg3: T3
     ): void;
 
-    BindAction(
-        actionName: string,
-        eventType: EIOEvent,
-        callback: (key: string, ...args: any[]) => void,
-        ...args: any[]
-    ): void {
+    BindAction(actionName: string, eventType: EIOEvent, callback: (key: string, ...args: any[]) => void, ...args: any[]): void {
         IOToolkit_BPF.IO_BindAction(
             this.name,
             actionName,
@@ -99,18 +69,9 @@ class IODevice {
 
     BindAxisKey(axisName: string, callback: (val: number) => void): void;
 
-    BindAxisKey<T1>(
-        axisName: string,
-        callback: (val: number, arg1: T1) => void,
-        arg1: T1
-    ): void;
+    BindAxisKey<T1>(axisName: string, callback: (val: number, arg1: T1) => void, arg1: T1): void;
 
-    BindAxisKey<T1, T2>(
-        axisName: string,
-        callback: (val: number, arg1: T1, arg2: T2) => void,
-        arg1: T1,
-        arg2: T2
-    ): void;
+    BindAxisKey<T1, T2>(axisName: string, callback: (val: number, arg1: T1, arg2: T2) => void, arg1: T1, arg2: T2): void;
 
     BindAxisKey<T1, T2, T3>(
         axisName: string,
@@ -120,11 +81,7 @@ class IODevice {
         arg3: T3
     ): void;
 
-    BindAxisKey(
-        axisKey: string,
-        callback: (val: number, ...args: any[]) => void,
-        ...args: any[]
-    ): void {
+    BindAxisKey(axisKey: string, callback: (val: number, ...args: any[]) => void, ...args: any[]): void {
         IOToolkit_BPF.IO_BindAxisKey(
             this.name,
             axisKey,
@@ -136,18 +93,9 @@ class IODevice {
 
     BindAxis(axisName: string, callback: (val: number) => void): void;
 
-    BindAxis<T1>(
-        axisName: string,
-        callback: (val: number, arg1: T1) => void,
-        arg1: T1
-    ): void;
+    BindAxis<T1>(axisName: string, callback: (val: number, arg1: T1) => void, arg1: T1): void;
 
-    BindAxis<T1, T2>(
-        axisName: string,
-        callback: (val: number, arg1: T1, arg2: T2) => void,
-        arg1: T1,
-        arg2: T2
-    ): void;
+    BindAxis<T1, T2>(axisName: string, callback: (val: number, arg1: T1, arg2: T2) => void, arg1: T1, arg2: T2): void;
 
     BindAxis<T1, T2, T3>(
         axisName: string,
@@ -157,11 +105,7 @@ class IODevice {
         arg3: T3
     ): void;
 
-    BindAxis(
-        axisName: string,
-        callback: (val: number, ...args: any[]) => void,
-        ...args: any[]
-    ): void {
+    BindAxis(axisName: string, callback: (val: number, ...args: any[]) => void, ...args: any[]): void {
         IOToolkit_BPF.IO_BindAxis(
             this.name,
             axisName,
@@ -180,12 +124,12 @@ class IODevice {
         IOToolkit_BPF.IO_SetDOOff(this.name, oaction);
     }
 
-    SetDO(
-        oaction: string,
-        val: number,
-        flag: ESetDOType = ESetDOType.OAction
-    ): void {
-        IOToolkit_BPF.IO_SetDO(this.name, oaction, val, flag);
+    SetDO(oaction: string, val: number): void {
+        IOToolkit_BPF.IO_SetDO(this.name, oaction, val, ESetDOType.OAction);
+    }
+
+    SetDOKey(keyName: string, val: number): void {
+        IOToolkit_BPF.IO_SetDO(this.name, keyName, val, ESetDOType.OAxis);
     }
 
     /// 实用函数

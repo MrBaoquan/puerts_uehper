@@ -1,14 +1,13 @@
 {
     "compilerOptions": {
         "target": "esnext",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
         "module": "commonjs",
+        "experimentalDecorators": true,
         "jsx": "react",
         "sourceMap": true,
-        "rootDir": "TypeScript",
         "typeRoots": ["Plugins/Puerts/Typing", "./node_modules/@types"],
         "outDir": "Content/JavaScript"
     },
-    "include": ["TypeScript"]
+    "include": ["TypeScript/**/*"],
+    "exclude": ["TypeScript/puerts_uehper/IOToolkit/**/*", "Plugins/Puerts/Typing/**/*.d.ts"]
 }

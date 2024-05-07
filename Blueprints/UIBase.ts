@@ -1,14 +1,16 @@
 import * as UE from 'ue';
 import TS_GameInstance from '../GamePlay/TS_GameInstance';
 import TS_UIBase from './TS_UIBase';
+import Managements from '../Core/Managements';
+
+// TODO: UI显示和隐藏(使用AddToViewport)打包后会出现问题，需要进一步测试
 class UIBase extends UE.Object {
     public Show(): UIBase {
         if (this.userWidget == null) {
             console.warn('userWidget is null');
             return this;
         }
-        if (this.userWidget.IsInViewport()) return this;
-        this.userWidget.AddToViewport();
+        if (!this.userWidget.IsInViewport()) this.userWidget.AddToViewport();
         (this.userWidget as TS_UIBase).OnShow();
         return this;
     }
@@ -18,12 +20,13 @@ class UIBase extends UE.Object {
             console.warn('userWidget is null');
             return this;
         }
-        if (!this.userWidget.IsInViewport()) return this;
-        this.userWidget.RemoveFromViewport();
+        //if (!this.userWidget.IsInViewport()) return this;
+        //this.userWidget.RemoveFromViewport();
         (this.userWidget as TS_UIBase).OnHide();
         return this;
     }
 
+    // @no-blueprint
     public Entity<T>(): T {
         return this.userWidget as any;
     }
@@ -43,10 +46,12 @@ class UIBase extends UE.Object {
 
     loadUI_UMG(uiPath: string): void {
         this.widgetPath = uiPath;
-
-        const world = TS_GameInstance.World;
-        const player = UE.GameplayStatics.GetPlayerController(world, 0);
-        this.userWidget = UE.WidgetBlueprintLibrary.Create(world, UE.Class.Load(this.widgetPath), player);
+        const world = Managements.World;
+        console.warn('world', world);
+        //const player = UE.GameplayStatics.GetPlayerController(world, 0);
+        //this.userWidget = UE.WidgetBlueprintLibrary.Create(world, UE.Class.Load(this.widgetPath), player);
+        this.userWidget = UE.UMGManager.CreateWidget(world, UE.Class.Load(this.widgetPath));
+        (this.userWidget as TS_UIBase).OnLoad();
     }
 }
 
